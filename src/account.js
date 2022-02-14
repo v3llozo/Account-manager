@@ -5,7 +5,9 @@ const Account = {
         if (account) {
             return account;
         } else {
-            return accounts.push({ id: id, balance: 0 });
+            let newAccount = { id: id, balance: 0 };
+            accounts.push(newAccount);
+            return newAccount;
         }
     },
 
@@ -14,14 +16,15 @@ const Account = {
     },
 
     deposit(id, value) {
-        let account = this.getAccount(id);
-        accounts.find((ac) => {
-            if (ac.id === account.id) {
-                ac.balance += value;
-                return ac;
+        let accountId = this.getAccount(id);
+        let res = {};
+        res = accounts.find((account) => {
+            if (account.id === accountId.id) {
+                account.balance += value;
+                return account;
             }
         });
-        return {};
+        return res;
     },
 
     withdraw(id, value) {

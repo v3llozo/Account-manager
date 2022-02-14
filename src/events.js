@@ -23,7 +23,7 @@ module.exports = {
         if (error) {
             res.status(error.code).send(error.message);
         } else {
-            res.send(result)
+            res.status(result.code).send(result.message);
         }
     },
     balance(req, res, next) {

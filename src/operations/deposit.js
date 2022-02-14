@@ -1,4 +1,7 @@
 const Account = require("../account");
 module.exports = (data) => {
-    return Account.deposit(data.destination, data.amount);
+    return {
+        code: 201,
+        message: Account.deposit(data.destination, data.amount),
+    };
 };
