@@ -45,5 +45,17 @@ const Account = {
         });
         return res;
     },
+    transfer(origin, destination, amount) {
+        let accountOrigin = this.getAccount(origin, false);
+        let accountDestination = this.getAccount(destination, false);
+        if (!accountOrigin || !accountDestination) {
+            return "0";
+        }
+        let res = {
+            origin: this.withdraw(origin, amount),
+            destination: this.deposit(destination, amount),
+        };
+        return res;
+    },
 };
 module.exports = Account;
