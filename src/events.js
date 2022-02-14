@@ -5,37 +5,27 @@ module.exports = {
     event(req, res, next) {
         console.log("Events:event");
         let body = req.body;
-        let error, result;
+        let result;
+        let error = {};
         if (
             ["type", "amount"].every((key) => Object.keys(body).includes(key))
         ) {
-            if (!body.destination && !body.origin) {
-                error = {
-                    code: 400,
-                    message: {
-                        error: "Missing Origin or Destination for the request",
-                    },
-                };
-            } else if (body.destination < 0 || body.origin < 0) {
-                error = {
-                    code: 400,
-                    message: {
-                        error: "Account ID must be a positive value",
-                    },
-                };
-            } else if (body.amount < 0) {
-                error = {
-                    code: 400,
-                    message: {
-                        error: "Amount must be a positive value",
-                    },
-                };
-            } else {
-                result = operations(body);
-            }
+            error.code = 400;
+            error.message = "Missing Type or Amount for the request";
+        } else if (!body.destination && !body.origin) {
+            error.code = 400;
+            error.message = "Missing Origin or Destination for the request";
+        } else if (body.destination < 0 || body.origin < 0) {
+            error.code = 400;
+            error.message = "Account ID must be a positive value";
+        } else if (body.amount < 0) {
+            error.code = 400;
+            error.message = "Amount must be a positive value";
+        } else {
+            result = operations(body);
         }
 
-        if (error) {
+        if (error.code) {
             res.status(error.code).send(error.message);
         } else {
             res.status(result.code).send(result.message);
@@ -45,24 +35,18 @@ module.exports = {
         console.log("Events:balance");
         let id = req.query.account_id;
         let result = {};
-        let error;
+        let error = {};
         if (!id) {
-            error = {
-                code: 400,
-                message: {
-                    error: "Missing Origin or Destination for the request",
-                },
-            };
+            error.code = 400;
+            error.message = "Missing Origin or Destination for the request";
         } else {
             result = Account.getBalance(id);
             if (!result) {
-                error = {
-                    code: 400,
-                    message: "0",
-                };
+                error.code = 400;
+                error.message = "0";
             }
         }
-        if (error) {
+        if (error.code) {
             res.status(error.code).send(error.message);
         } else {
             res.send(result.balance.toString());
