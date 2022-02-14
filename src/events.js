@@ -7,9 +7,7 @@ module.exports = {
         let body = req.body;
         let result;
         let error = {};
-        if (
-            ["type", "amount"].every((key) => Object.keys(body).includes(key))
-        ) {
+        if (!body.type || !body.amount) {
             error.code = 400;
             error.message = "Missing Type or Amount for the request";
         } else if (!body.destination && !body.origin) {
