@@ -1,4 +1,5 @@
 const operations = require("./operations");
+const Account = require("./account");
 
 module.exports = {
     event(req, res, next) {
@@ -15,6 +16,20 @@ module.exports = {
                         error: "Missing Origin or Destination for the request",
                     },
                 };
+            } else if (body.destination < 0 || body.origin < 0) {
+                error = {
+                    code: 400,
+                    message: {
+                        error: "Account ID must be a positive value",
+                    },
+                };
+            } else if (body.amount < 0) {
+                error = {
+                    code: 400,
+                    message: {
+                        error: "Amount must be a positive value",
+                    },
+                };
             } else {
                 result = operations(body);
             }
@@ -28,5 +43,33 @@ module.exports = {
     },
     balance(req, res, next) {
         console.log("Events:balance");
+        let id = req.query.account_id;
+        let result = {};
+        let error;
+        if (!id) {
+            error = {
+                code: 400,
+                message: {
+                    error: "Missing Origin or Destination for the request",
+                },
+            };
+        } else {
+            result = Account.getBalance(id);
+            if (!result) {
+                error = {
+                    code: 400,
+                    message: "0",
+                };
+            }
+        }
+        if (error) {
+            res.status(error.code).send(error.message);
+        } else {
+            res.send(result.balance.toString());
+        }
+    },
+    reset(req, res, next) {
+        console.log("Events:reset");
+        res.send(Account.reset());
     },
 };

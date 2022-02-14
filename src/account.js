@@ -1,5 +1,9 @@
 accounts = [];
 const Account = {
+    reset() {
+        accounts = [];
+        return "OK";
+    },
     getAccount(id, createNew) {
         let account = accounts.find((account) => account.id === id);
         if (account) {
@@ -16,7 +20,16 @@ const Account = {
     },
 
     getBalance(id) {
-        return accounts.find((account) => account.id === id);
+        let accountId = this.getAccount(id);
+        if (!accountId) {
+            return undefined;
+        } else {
+            return accounts.find((account) => {
+                if (account.id === accountId.id) {
+                    return account;
+                }
+            });
+        }
     },
 
     deposit(id, value) {
