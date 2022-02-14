@@ -1,13 +1,17 @@
 accounts = [];
 const Account = {
-    getAccount(id) {
+    getAccount(id, createNew) {
         let account = accounts.find((account) => account.id === id);
         if (account) {
             return account;
         } else {
-            let newAccount = { id: id, balance: 0 };
-            accounts.push(newAccount);
-            return newAccount;
+            if (createNew) {
+                let newAccount = { id: id, balance: 0 };
+                accounts.push(newAccount);
+                return newAccount;
+            } else {
+                return 0;
+            }
         }
     },
 
@@ -16,7 +20,7 @@ const Account = {
     },
 
     deposit(id, value) {
-        let accountId = this.getAccount(id);
+        let accountId = this.getAccount(id, true);
         let res = {};
         res = accounts.find((account) => {
             if (account.id === accountId.id) {
@@ -28,13 +32,18 @@ const Account = {
     },
 
     withdraw(id, value) {
-        let account = this.getAccount(id);
-        accounts.find((ac) => {
-            if (ac.id === account.id) {
-                ac.balance -= value;
+        let accountId = this.getAccount(id, false);
+        if (!accountId) {
+            return 0;
+        }
+        let res = {};
+        res = accounts.find((account) => {
+            if (account.id === accountId.id) {
+                account.balance -= value;
+                return account;
             }
         });
-        return account;
+        return res;
     },
 };
 module.exports = Account;
