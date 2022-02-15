@@ -9,7 +9,7 @@ module.exports = (data) => {
     } else {
         return {
             code: 201,
-            message: res,
+            message: { origin: res },
         };
     }
 };

@@ -1,7 +1,11 @@
-accounts = [];
+const defaultAccount = [
+    { id: "100", balance: 0 },
+    { id: "300", balance: 0 },
+];
+accounts = defaultAccount;
 const Account = {
     reset() {
-        accounts = [];
+        accounts = defaultAccount;
         return "OK";
     },
     getAccount(id, createNew) {
