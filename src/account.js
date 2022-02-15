@@ -1,11 +1,13 @@
-const defaultAccount = [
+let accounts = [
     { id: "100", balance: 0 },
     { id: "300", balance: 0 },
 ];
-accounts = defaultAccount;
 const Account = {
     reset() {
-        accounts = defaultAccount;
+        accounts = [
+            { id: "100", balance: 0 },
+            { id: "300", balance: 0 },
+        ];
         return "OK";
     },
     getAccount(id, createNew) {
