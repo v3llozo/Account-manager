@@ -36,11 +36,11 @@ module.exports = {
         let error = {};
         if (!id) {
             error.code = 400;
-            error.message = "Missing Origin or Destination for the request";
+            error.message = "Missing account_id for the request";
         } else {
             result = Account.getBalance(id);
             if (!result) {
-                error.code = 400;
+                error.code = 404;
                 error.message = "0";
             }
         }
