@@ -8,23 +8,19 @@ module.exports = {
         let result;
         let error = {};
         if (!body.type || !body.amount) {
-            error.code = 400;
             error.message = "Missing Type or Amount for the request";
         } else if (!body.destination && !body.origin) {
-            error.code = 400;
             error.message = "Missing Origin or Destination for the request";
         } else if (body.destination < 0 || body.origin < 0) {
-            error.code = 400;
             error.message = "Account ID must be a positive value";
         } else if (body.amount < 0) {
-            error.code = 400;
             error.message = "Amount must be a positive value";
         } else {
             result = operations(body);
         }
 
-        if (error.code) {
-            res.status(error.code).send(error.message);
+        if (error.message) {
+            res.status(400).send(error.message);
         } else {
             res.status(result.code).send(result.message);
         }
